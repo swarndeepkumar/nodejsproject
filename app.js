@@ -1,13 +1,12 @@
-var http    = require('http');
-var express = require('express');
-var app     = express();
-/*http.createServer(function(req,res){
-	res.end("yahooo");
-}).listen(3000,'localhost');
-*/
-app.get('/home',function(req,res){
-	res.send("I have got the get response");
-
-});
-
-console.log('Server is running at localhost:3000');
+var http = require('http');
+ 
+var server = http.createServer(function (req, res) {
+console.log('request headers...');
+console.log(req.headers);
+ 
+// respond
+res.write('hello client!');
+res.end();
+ 
+}).listen(3000);
+console.log('server running on port 3000');
