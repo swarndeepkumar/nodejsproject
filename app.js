@@ -19,10 +19,25 @@ if (req.method == 'GET') {
  
 	// resolve file path to filesystem path
 	var fileurl;
-	if (req.url == '/') fileurl = '/index.html';
-	else fileurl = req.url;
+	//if (req.url == '/') fileurl = '/index.html';
+	//else fileurl = req.url;
+	switch(req.url){
+		case '/':
+			fileurl = '/index.html';
+			break;
+		case '/form':
+			fileurl = '/form.html';
+			break;
+        case '/contact':
+			fileurl = '/contact.html';
+			break;
+		default:
+			fileurl = req.url;
+
+	}
+	
 	var filepath = path.resolve('./public' + fileurl);
-	 
+	
 	// lookup mime type
 	var fileExt = path.extname(filepath);
 	var mimeType = mimeLookup[fileExt];
@@ -30,11 +45,10 @@ if (req.method == 'GET') {
 		send404(res);
 		return;
 	}
-	 
+	
 	// see if we have that file
 	fs.exists(filepath, function (exists) {
-	 
-		// if not
+	    // if not
 		if (!exists) {
 			send404(res);
 			return;
@@ -42,8 +56,12 @@ if (req.method == 'GET') {
 		 
 		// finally stream the file
 		res.writeHead(200, { 'content-type': mimeType });
+		
 		fs.createReadStream(filepath).pipe(res);
 	});
+
+
+
 }
 else {
 	send404(res);
